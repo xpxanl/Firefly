@@ -17,6 +17,13 @@ export const sponsorConfig: SponsorConfig = {
 	// 是否显示评论区，需要先在commentConfig.ts启用评论系统
 	showComment: true,
 
-	// 是否在文章详情页底部显示打赏按钮
-	showButtonInPost: true,
+	// 新增：赞助人列表数组（页面filter循环用）
+	list: [
+		// 示例赞助人，可自行增删
+		{
+			name: "测试赞助人",
+			link: "",
+			avatar: ""
+		}
+	]
 }
