@@ -19,6 +19,4 @@ export const sponsorConfig: SponsorConfig = {
 
 	// 是否在文章详情页底部显示打赏按钮
 	showButtonInPost: true,
-
-	// 打赏方式列表
-	
+}
