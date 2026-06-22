@@ -17,7 +17,7 @@
 > 
 > [![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/Z8Z41NQALY)
 >
-> **QQ交流群：[1087127207](https://qm.qq.com/q/ZGsFa8qX2G)**
+> **QQ交流群：[1087127207](https://)**
 > 
 > ![GitHub License](https://img.shields.io/github/license/CuteLeafawacg)
 [![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/CuteLeafawacg)
