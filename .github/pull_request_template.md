@@ -7,7 +7,7 @@
 
 ## Checklist
 
-- [ ] I have read the [**CONTRIBUTING**](https://github.com/CuteLeaf/Firefly/blob/master/CONTRIBUTING.md) document.
+- [ ] I have read the [**CONTRIBUTING**](https://github.com/CuteLeaf/awacg/blob/master/CONTRIBUTING.md) document.
 - [ ] I have checked to ensure that this Pull Request is not for personal changes.
 - [ ] I have performed a self-review of my own code.
 - [ ] My changes generate no new warnings.

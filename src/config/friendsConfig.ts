@@ -33,10 +33,10 @@ export const friendsConfig: FriendLink[] = [
 		enabled: true, // 是否启用
 	},
 	{
-		title: "Firefly Docs",
-		imgurl: "https://docs-firefly.cuteleaf.cn/logo.png",
+		title: "awacg Docs",
+		imgurl: "https://docs-awacg.cuteleaf.cn/logo.png",
 		desc: "Firefly主题模板文档",
-		siteurl: "https://docs-firefly.cuteleaf.cn",
+		siteurl: "https://docs-awacg.cuteleaf.cn",
 		tags: ["Docs"],
 		weight: 9,
 		enabled: true,
