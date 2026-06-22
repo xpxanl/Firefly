@@ -27,6 +27,7 @@ export const siteConfig: SiteConfig = {
 		"游戏",
 		"SLG",
 		"RPG",
+		"JRPG"
 	],
 
 	// 主题色
