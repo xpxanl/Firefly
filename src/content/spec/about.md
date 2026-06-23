@@ -15,6 +15,9 @@ Please do not run and use it before reading and accepting all the terms of this 
 2. No responsibility is assumed for any adverse effects caused by using this software.
 3. Please consciously delete it within 24 hours after downloading. If you like this game, please buy the genuine one and authorize it for legal use.
 Please read this description carefully before using the software. Once you start running and using it, you will agree to all the contents of the statement by default, and will not be responsible for any adverse effects!
+
+
+<div class="whitespace-pre-wrap">
 喜欢请购买正版并授权合法使用
 此只适合测试试用版本
 转载自各大媒体和网络
@@ -29,7 +32,7 @@ Please read this description carefully before using the software. Once you start
 不提倡你按照它的内容中重演任何事情游戏中所有的人物都至少年满18周岁.如果您理解并接受这些条款，您可以进入
 一旦开始运行和使用以后就默认同意了该申明中的所有内容，若有任何不良影响概不负责！
 (注：此申明包括分享的，视频，游戏，漫画，软件，）
-
+</div>
 ---
 
 *感谢你的来访！希望在这里能找到对你有用的内容！*
