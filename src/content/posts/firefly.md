@@ -1,44 +1,29 @@
 ---
-title: Firefly 一款清新美观的 Astro 
+title: 解压教程 
 published: 1970-01-02
 pinned: true
-description: Firefly 是一款基于 Astro 框架和 Fuwari 模板开发的清新美观且现代化个人博客主题模板，专为技术爱好者和内容创作者设计。该主题融合了现代 Web 技术栈，提供了丰富的功能模块和高度可定制的界面，让您能够轻松打造出专业且美观的个人博客网站。
-tags: [Markdown, Firefly, 博客, 主题, 模板]
-category: 文章示例
+description: 关于游戏如何解压，入站必看。
+tags: [教程, 游戏, 压缩包]
 draft: false
 image: ./images/firefly2.avif
 ---
 
-## 🌟 项目概述
-
-**Firefly** 是一款基于 Astro 框架和 Fuwari 模板开发的清新美观且现代化个人博客主题模板，专为技术爱好者和内容创作者设计。该主题融合了现代 Web 技术栈，提供了丰富的功能模块和高度可定制的界面，让您能够轻松打造出专业且美观的个人博客网站。
-
-
-**🖥️在线预览： [Firefly - Demo site](https://firefly.cuteleaf.cn/)**
-
-**🏠我的博客： [https://blog.cuteleaf.cn](https://blog.cuteleaf.cn/)**
-
-**📝Firefly使用文档： [https://docs-firefly.cuteleaf.cn](https://docs-firefly.cuteleaf.cn/)**
-
-**⭐Firefly开源地址：[https://github.com/CuteLeaf/Firefly](https://github.com/CuteLeaf/Firefly)** 
-
-**⭐Fuwari开源地址：[https://github.com/saicaca/fuwari](https://github.com/saicaca/fuwari)**
-
-::github{repo="CuteLeaf/Firefly"}
-
-::github{repo="saicaca/fuwari"}
-
-![Firefly](./images/1.avif)
-
-
-## 🚀 技术架构
-
-- **静态站点生成**: 基于 Astro ，提供极快的加载速度和优秀的 SEO 优化
-- **TypeScript 支持**: 完整的类型安全，提升开发体验和代码质量
-- **响应式设计**: 使用 Tailwind CSS 构建，完美适配桌面端和移动端
-- **组件化开发**: 支持 Astro、Svelte 组件，灵活可扩展
-
-
-## 📖 配置说明
-
-> 📚 **详细配置文档**: 查看 [Firefly使用文档](https://docs-firefly.cuteleaf.cn/) 获取完整的配置指南
+第一步 将分卷包下载到同一个文件夹下
+https://p.sda1.dev/33/d5d1db3778de7d7ef50630c99dbea7f3/image.png
+第二步 点击后缀为.part1的分卷包打开
+https://p.sda1.dev/33/da860c6651d329cda478528d301d8f36/image.png
+第三步 输入解压密码
+https://p.sda1.dev/33/a13246041681d2952fe2b03f7c45cb40/image.png
+第四步 得到一个jpg文件
+https://p.sda1.dev/33/a6171ebfb88a60d30c57b071a7d7d7d1/image.png
+注意 点击文件管理器查看选项 文件拓展名是否勾选，否则后续改后缀无效
+https://p.sda1.dev/33/0ebe99a496f0e549e7e18260a5a9159e/image.png
+第五步 重命名改为rar后缀，改完之后可得到一个正常的压缩包
+https://p.sda1.dev/33/4e9455edbe20734883858517e86bb7c2/image.png
+https://p.sda1.dev/33/e39009db4d77ad53ce965b809b766b53/image.png
+第六步 解压压缩包
+https://p.sda1.dev/33/0021a1ca927d6d85775025a77dfe6d4e/image.png
+https://p.sda1.dev/33/cc4bdfb14d6f3e9d90bb609fbdf35657/image.png
+https://p.sda1.dev/33/b3a58b8d6a437f012aed09447b849556/image.png
+以上解压教程，安卓同理
+到此解压教程结束，可以去快乐游玩了！！
