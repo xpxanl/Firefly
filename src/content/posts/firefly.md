@@ -9,6 +9,10 @@ image: ./images/firefly2.avif
 ---
 
 第一步 将分卷包下载到同一个文件夹下
+<img src="https://p.sda1.dev/33/d5d1db3778de7d7ef50630c99dbea7f3/image.png" >
+[img]https://p.sda1.dev/33/d5d1db3778de7d7ef50630c99dbea7f3/image.png[/img]
+![](https://p.sda1.dev/33/d5d1db3778de7d7ef50630c99dbea7f3/image.png)
+https://p.sda1.dev/api/v1/delete/33/d5d1db3778de7d7ef50630c99dbea7f3/e4c53f36f2897f91
 https://p.sda1.dev/33/d5d1db3778de7d7ef50630c99dbea7f3/image.png
 第二步 点击后缀为.part1的分卷包打开
 https://p.sda1.dev/33/da860c6651d329cda478528d301d8f36/image.png
