@@ -27,7 +27,7 @@ image: ./images/firefly2.avif
 <img src="https://p.sda1.dev/33/e39009db4d77ad53ce965b809b766b53/image.png" >
 
 第六步 解压压缩包
-<img src="https://p.sda1.dev/33/0021a1ca927d6d85775025a77dfe6d4e/image.png" >g
+<img src="https://p.sda1.dev/33/0021a1ca927d6d85775025a77dfe6d4e/image.png" >
 <img src="https://p.sda1.dev/33/cc4bdfb14d6f3e9d90bb609fbdf35657/image.png" >
 <img src="https://p.sda1.dev/33/b3a58b8d6a437f012aed09447b849556/image.png" >
 以上解压教程，安卓同理
