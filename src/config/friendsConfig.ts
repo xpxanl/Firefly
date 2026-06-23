@@ -56,7 +56,8 @@ Please read this description carefully before using the software. Once you start
 	randomizeSort: false,
 };
 
-// 必须导出友链过滤函数
-export function getEnabledFriends(list: FriendLink[]) {
-  return list.filter(item => item.enabled !== false);
+// 必须导出友链过滤函数（带空值防护）
+export function getEnabledFriends(list?: FriendLink[]) {
+  if (!Array.isArray(list)) return [];
+  return list.filter(item => item.enable !== false);
 }
