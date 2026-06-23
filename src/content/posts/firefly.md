@@ -4,6 +4,7 @@ published: 1970-01-02
 pinned: true
 description: 关于游戏如何解压，入站必看。
 tags: [教程, 游戏, 压缩包]
+category: 教程
 draft: false
 image: ./images/firefly2.avif
 ---

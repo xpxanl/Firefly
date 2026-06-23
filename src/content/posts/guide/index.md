@@ -9,7 +9,7 @@ category: 教程
 draft: false
 ---
 
-MTool
+## MTool
 
 第一步 解压出翻译工具，并打开此文件
 <img src="https://p.sda1.dev/33/8578d6b69846e0ea1d8ec742c94bb1c7/image.png" >
