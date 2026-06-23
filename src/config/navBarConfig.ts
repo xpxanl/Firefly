@@ -93,7 +93,7 @@ const getDynamicNavBarConfig = (): NavBarConfig => {
 				icon: "fa7-brands:qq",
 			},
 			{
-				name: "awacg文档",
+				name: "文档",
 				url: "https://docs-awacg.cn",
 				external: true,
 				icon: "material-symbols:docs",
