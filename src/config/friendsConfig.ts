@@ -42,9 +42,9 @@ Please read this description carefully before using the software. Once you start
 这个游戏包含面向18岁及以上的成人性取向内容如果您未满18岁，如果成人内容冒犯了您，
 或者你正在从法律禁止成人内容的任何国家或地区访问本游戏，请立即离开！本游戏中的性行为是幻想，不是现实，
 不提倡你按照它的内容中重演任何事情游戏中所有的人物都至少年满18周岁.如果您理解并接受这些条款，您可以进入
-一旦开始运行和使用以后就默认同意了该申明中所有内容，若有任何不良影响概不负责！
+一旦开始运行和使用以后就默认同意了该申明中的所有内容，若有任何不良影响概不负责！
 
-(注：此申明包括分享的，视频，游戏，漫画，软件）`,
+(注：此申明包括分享的，视频，游戏，漫画，软件，）`,
 
 	// 是否显示底部自定义内容（friends.mdx 中的内容）
 	showCustomContent: true,
@@ -55,3 +55,8 @@ Please read this description carefully before using the software. Once you start
 	// 是否开启随机排序配置，如果开启，就会忽略权重，构建时进行一次随机排序
 	randomizeSort: false,
 };
+
+// 必须导出友链过滤函数
+export function getEnabledFriends(list: FriendLink[]) {
+  return list.filter(item => item.enabled !== false);
+}
