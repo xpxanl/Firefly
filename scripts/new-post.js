@@ -8,8 +8,11 @@ function getDate() {
   const year = today.getFullYear()
   const month = String(today.getMonth() + 1).padStart(2, "0")
   const day = String(today.getDate()).padStart(2, "0")
+  const hours = String(today.getHours()).padStart(2, "0")
+  const mins = String(today.getMinutes()).padStart(2, "0")
+  const secs = String(today.getSeconds()).padStart(2, "0")
 
-  return `${year}-${month}-${day}`
+  return `${year}-${month}-${day}T${hours}:${mins}:${secs}`
 }
 
 const args = process.argv.slice(2)
