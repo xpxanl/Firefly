@@ -9,25 +9,6 @@
       "path": "[[workspace]]/src/content/posts"
     }
   ],
-  "frontMatter.taxonomy.tags": [
-    "RPG",
-    "R8",
-    "AI汉化",
-    "SLG",
-    "像素",
-    "动态CG",
-    "日常",
-    "巨乳",
-    "口交",
-    "甜蜜",
-    "CV",
-    "PC",
-    "魔物娘"
-  ],
-  "frontMatter.taxonomy.categories": [
-    "游戏",
-    "汉化作品"
-  ],
   "frontMatter.taxonomy.contentTypes": [
     {
       "name": "default",
@@ -35,41 +16,49 @@
       "previewPath": null,
       "fields": [
         {
-          "title": "Title",
+          "title": "标题 title",
           "name": "title",
           "type": "string"
         },
         {
-          "title": "Description",
-          "name": "description",
-          "type": "string"
-        },
-        {
-          "title": "Publishing date",
-          "name": "date",
+          "title": "发布时间 published",
+          "name": "published",
           "type": "datetime",
           "default": "{{now}}",
+          "dateFormat": "YYYY-MM-DDTHH:mm:ss",
           "isPublishDate": true
         },
         {
-          "title": "Content preview",
-          "name": "preview",
+          "title": "封面图 image",
+          "name": "image",
           "type": "image"
         },
         {
-          "title": "Is in draft",
-          "name": "draft",
-          "type": "draft"
+          "title": "置顶 pinned",
+          "name": "pinned",
+          "type": "boolean",
+          "default": false
         },
         {
-          "title": "Tags",
+          "title": "标签 tags",
           "name": "tags",
           "type": "tags"
         },
         {
-          "title": "Categories",
-          "name": "categories",
-          "type": "categories"
+          "title": "单分类 category",
+          "name": "category",
+          "type": "select",
+          "options": [
+            "RPG",
+            "SLG",
+            "ACT",
+            "ADV"
+          ]
+        },
+        {
+          "title": "草稿 draft",
+          "name": "draft",
+          "type": "draft"
         }
       ]
     }
