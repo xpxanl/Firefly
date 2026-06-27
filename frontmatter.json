@@ -9,46 +9,11 @@
       "path": "[[workspace]]/src/content/posts"
     }
   ],
-  "frontMatter.taxonomy.tags": [
-    "RPG",
-    "R8",
-    "AI汉化",
-    "SLG",
-    "像素",
-    "动态CG",
-    "日常",
-    "巨乳",
-    "口交",
-    "甜蜜",
-    "CV",
-    "PC",
-    "魔物娘",
-    "官中",
-    "NTR",
-    "JK",
-    "小马",
-    "冒险",
-    "AZ",
-    "战斗H",
-    "百合",
-    "触手"
-  ],
-  "frontMatter.taxonomy.categories": [
-    "RPG",
-    "SLG",
-    "ACT",
-    "ADV",
-    "ARPG",
-    "游戏",
-    "汉化作品"
-  ],
   "frontMatter.taxonomy.contentTypes": [
     {
-      "name": "default",
+      "name": "post",
       "pageBundle": false,
-      "previewPath": null,
       "filePrefix": "",
-      "template": "[[workspace]]/.frontmatter/templates/模板.md",
       "fields": [
         {
           "title": "标题 title",
@@ -66,7 +31,6 @@
           "name": "published",
           "type": "datetime",
           "default": "{{now}}",
-          "dateFormat": "YYYY-MM-DDTHH:mm:ss.000Z",
           "isPublishDate": true
         },
         {
@@ -89,13 +53,7 @@
           "title": "单分类 category",
           "name": "category",
           "type": "select",
-          "options": [
-            "RPG",
-            "SLG",
-            "ACT",
-            "ADV",
-            "ARPG"
-          ]
+          "options": ["RPG","SLG"]
         },
         {
           "title": "草稿 draft",
