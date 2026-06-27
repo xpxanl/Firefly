@@ -9,6 +9,39 @@
       "path": "[[workspace]]/src/content/posts"
     }
   ],
+  "frontMatter.taxonomy.tags": [
+    "RPG",
+    "R8",
+    "AI汉化",
+    "SLG",
+    "像素",
+    "动态CG",
+    "日常",
+    "巨乳",
+    "口交",
+    "甜蜜",
+    "CV",
+    "PC",
+    "魔物娘",
+    "官中",
+    "NTR",
+    "JK",
+    "小马",
+    "冒险",
+    "AZ",
+    "战斗H",
+    "百合",
+    "触手"
+  ],
+  "frontMatter.taxonomy.categories": [
+    "RPG",
+    "SLG",
+    "ACT",
+    "ADV",
+    "ARPG",
+    "游戏",
+    "汉化作品"
+  ],
   "frontMatter.taxonomy.contentTypes": [
     {
       "name": "default",
@@ -33,7 +66,7 @@
           "name": "published",
           "type": "datetime",
           "default": "{{now}}",
-          "dateFormat": "YYYY-MM-DDTHH:mm:ss",
+          "dateFormat": "YYYY-MM-DDTHH:mm:ss.000Z",
           "isPublishDate": true
         },
         {
