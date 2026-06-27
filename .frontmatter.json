@@ -1,0 +1,49 @@
+{
+  "$schema": "https://frontmatter.codes/frontmatter.schema.json",
+  "frontMatter.taxonomy.tags": [
+    "RPG",
+    "AI汉化",
+    "像素",
+    "SLG",
+    "动态CG"
+  ],
+  "frontMatter.taxonomy.categories": [],
+  "frontMatter.framework.id": "astro",
+  "frontMatter.content.pageFolders": [
+    {
+      "title": "文章",
+      "path": "[[workspace]]/src/content/posts",
+      "contentTypes": ["post"]
+    }
+  ],
+  "frontMatter.content.contentTypes": [
+    {
+      "name": "post",
+      "pageType": "article",
+      "fields": [
+        {
+          "name": "title",
+          "title": "文章标题",
+          "type": "string"
+        },
+        {
+          "name": "date",
+          "title": "发布日期",
+          "type": "datetime",
+          "default": "{{now}}",
+          "dateFormat": "YYYY-MM-DD"
+        },
+        {
+          "name": "tags",
+          "title": "标签分类",
+          "type": "tags"
+        },
+        {
+          "name": "cover",
+          "title": "封面图",
+          "type": "image"
+        }
+      ]
+    }
+  ]
+}
