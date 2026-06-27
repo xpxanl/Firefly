@@ -14,11 +14,19 @@
       "name": "default",
       "pageBundle": false,
       "previewPath": null,
+      "filePrefix": "",
+      "template": "[[workspace]]/.frontmatter/templates/模板.md",
       "fields": [
         {
           "title": "标题 title",
           "name": "title",
           "type": "string"
+        },
+        {
+          "title": "简介 description",
+          "name": "description",
+          "type": "string",
+          "required": false
         },
         {
           "title": "发布时间 published",
@@ -58,7 +66,8 @@
         {
           "title": "草稿 draft",
           "name": "draft",
-          "type": "draft"
+          "type": "boolean"
+"default": false
         }
       ]
     }
