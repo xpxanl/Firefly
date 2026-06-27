@@ -60,14 +60,15 @@
             "RPG",
             "SLG",
             "ACT",
-            "ADV"
+            "ADV",
+            "ARPG"
           ]
         },
         {
           "title": "草稿 draft",
           "name": "draft",
-          "type": "boolean"
-"default": false
+          "type": "boolean",
+          "default": false
         }
       ]
     }
