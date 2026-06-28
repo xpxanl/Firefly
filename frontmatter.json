@@ -53,13 +53,21 @@
           "title": "单分类 category",
           "name": "category",
           "type": "select",
-          "options": ["RPG","SLG"]
+          "options": [
+            "RPG",
+            "SLG"
+          ]
         },
         {
           "title": "草稿 draft",
           "name": "draft",
           "type": "boolean",
           "default": false
+        },
+        {
+          "title": "fmContentType",
+          "name": "fmContentType",
+          "type": "string"
         }
       ]
     }

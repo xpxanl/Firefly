@@ -52,10 +52,10 @@ pinned: false
 image: ''
 tags: []
 category: ''
-draft: false 
+draft: false
 ---
 `
 
-fs.writeFileSync(path.join(targetDir, fileName), content)
+fs.writeFileSync(fullPath, content)
 
 console.log(`Post ${fullPath} created`)
