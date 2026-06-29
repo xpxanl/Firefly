@@ -54,6 +54,12 @@ MTool(PC+AZ)
  <img src="https://tu.awacg.us/file/1782699492830_image.png" alt="image.png" width=100% />
  此弹窗不能关闭，否则无翻译效果
  
+ RenpyThief
+ 
+链接: https://pan.baidu.com/s/14XoshaozHbYYhYNul8z4ng 提取码: 5hts 
+
+ 
+
 更多工具待更新.....
 
 
