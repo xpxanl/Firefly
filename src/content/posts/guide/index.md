@@ -35,7 +35,25 @@ MTool(PC+AZ)
 翻译工具
 链接: https://pan.baidu.com/s/1OMawYlsSWQo93f-YRVswTw 提取码: mmdl 
 
-
+## RenpyThief
+第一步 网盘链接下载游戏一键汉化工具，其他的按需选择
+<img src="https://tu.awacg.us/file/1782697055027_image.png" alt="image.png" width=100% />
+第二步 双击安装工具
+<img src="https://tu.awacg.us/file/1782697122702_image.png" alt="image.png" width=100% />
+第三步 安装完成之后桌面出现软件图标，双击打开，并注册账号
+<img src="https://tu.awacg.us/file/1782697264262_image.png" alt="image.png" width=100% />
+第四步 按提示拖入生肉游戏的exe程序
+<img src="https://tu.awacg.us/file/1782697673329_image.png" alt="image.png" width=100% />
+ 第一次注入游戏请等游戏完全打开再进行翻译
+ <img src="https://tu.awacg.us/file/1782698931567_image.png" alt="image.png" width=100% />
+ <img src="https://tu.awacg.us/file/1782699175922_批注_2026-06-29_101236.png" alt="批注 2026-06-29 101236.png" width=100% />
+ 出现成功注入提示后游戏会自行关闭并自行打开
+ <img src="https://tu.awacg.us/file/1782699381836_image.png" alt="image.png" width=100% />可以看到已经成功翻译了
+ <img src="https://tu.awacg.us/file/1782699458683_image.png" alt="image.png" width=100% />
+ 注意：
+ <img src="https://tu.awacg.us/file/1782699492830_image.png" alt="image.png" width=100% />
+ 此弹窗不能关闭，否则无翻译效果
+ 
 更多工具待更新.....
 
 

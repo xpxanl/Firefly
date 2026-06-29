@@ -12,7 +12,7 @@ export const profileConfig: ProfileConfig = {
 	name: "awacg.us",
 
 	// 个人签名
-	bio: "一个分享免费游戏的网站",
+	bio: "一个免费分享游戏的网站",
 
 	// 链接配置
 	// 已经预装的图标集：fa7-brands，fa7-regular，fa7-solid，material-symbols，simple-icons
