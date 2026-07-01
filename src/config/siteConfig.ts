@@ -27,7 +27,7 @@ export const siteConfig: SiteConfig = {
 		"游戏",
 		"SLG",
 		"RPG",
-		"JRPG"
+		"ADV"
 	],
 
 	// 主题色
@@ -104,7 +104,7 @@ export const siteConfig: SiteConfig = {
 		// 打赏页面开关
 		sponsor: false,
 		// 留言板页面开关，需要配置评论系统
-		guestbook: false,
+		guestbook: true,
 		// 番组计划页面开关，含追番、游戏、书籍和音乐
 		bangumi: false,
 		// 相册页面开关
