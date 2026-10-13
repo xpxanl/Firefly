@@ -3,12 +3,7 @@
   "frontMatter.framework.id": "astro",
   "frontMatter.preview.host": "http://localhost:4321",
   "frontMatter.content.publicFolder": "public",
-  "frontMatter.content.pageFolders": [
-    {
-      "title": "文章",
-      "path": "[[workspace]]/src/content/posts"
-    }
-  ],
+  "frontMatter.content.pageFolders": [],
   "frontMatter.taxonomy.contentTypes": [
     {
       "name": "post",
