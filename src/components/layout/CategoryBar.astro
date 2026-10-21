@@ -190,19 +190,38 @@ const archiveUrl = url("/archive/");
   let delayedCategoryBarScrollTimer: number | undefined;
 
   function getCategoryBarState(bar: HTMLElement, currentUrl: URL) {
-    const pathname = currentUrl.pathname.replace(/\/$/, "");
+    const base = (import.meta.env.BASE_URL || "/").replace(/\/$/, "");
+    let pathname = currentUrl.pathname;
+    if (base && pathname.startsWith(base)) {
+      pathname = pathname.slice(base.length);
+    }
+    pathname = pathname.replace(/\/$/, "");
     const homePath = (bar.getAttribute("data-home-path") || "/").replace(/\/$/, "");
     const archivePath = (bar.getAttribute("data-archive-path") || "/archive").replace(/\/$/, "");
     const isHome = pathname === homePath || pathname === "" || pathname === "/";
     const isArchive = pathname === archivePath;
     const isCategories = pathname === "/categories";
 
+    // 分类/标签现在是独立静态页：/categories/<分类>/、/tags/<标签>/
+    const segments = pathname.split("/").filter(Boolean);
+    const isCategoryPage = segments[0] === "categories" && segments.length > 1;
+    const isTagPage = segments[0] === "tags" && segments.length > 1;
+
+    let activeCategory = currentUrl.searchParams.get("category") || "";
+    if (!activeCategory && isCategoryPage) {
+      try {
+        activeCategory = decodeURIComponent(segments[1] || "");
+      } catch {
+        activeCategory = segments[1] || "";
+      }
+    }
+
     return {
       isHome,
       isArchive,
       isCategories,
-      activeCategory: currentUrl.searchParams.get("category") || "",
-      hasTag: currentUrl.searchParams.has("tag"),
+      activeCategory,
+      hasTag: currentUrl.searchParams.has("tag") || isTagPage,
       hasUncategorized: currentUrl.searchParams.has("uncategorized"),
     };
   }

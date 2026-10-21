@@ -4,43 +4,22 @@ import { i18n } from "@i18n/translation";
 import { navigateToPage } from "@utils/navigation-utils";
 import { onMount } from "svelte";
 import Icon from "@/components/common/Icon.svelte";
-import type { SearchResult } from "@/global";
-import { url as formatUrl, getSearchUrl } from "@/utils/url-utils";
+import { loadTitleIndex, searchTitles } from "@/utils/title-search";
+import { getSearchUrl } from "@/utils/url-utils";
+
+interface SearchResultItem {
+	url: string;
+	meta: { title: string };
+	excerpt: string;
+}
 
 // --- State ---
 let keywordDesktop = "";
 let keywordMobile = "";
-let result: SearchResult[] = [];
+let result: SearchResultItem[] = [];
 let isSearching = false;
 let initialized = false;
-let debounceTimer: NodeJS.Timeout;
-
-// --- Mocks for Dev Mode ---
-const fakeResult: SearchResult[] = [
-	{
-		url: formatUrl("/"),
-		meta: { title: "This Is a Fake Search Result" },
-		excerpt:
-			"Because Pagefind cannot work in the <mark>dev</mark> environment.",
-	},
-	{
-		url: formatUrl("/"),
-		meta: { title: "If You Want to Test the Search" },
-		excerpt: "Try running <mark>npm build && npm preview</mark> instead.",
-	},
-];
-
-// 索引只包含文章标题，摘录/内容与标题重复时不再重复展示
-const plainText = (value?: string): string =>
-	(value ?? "")
-		.replace(/<[^>]*>/g, "")
-		.replace(/\s+/g, " ")
-		.trim();
-
-const hasDistinctExcerpt = (item: SearchResult, text?: string): boolean => {
-	if (!text || !text.includes("<mark>")) return false;
-	return plainText(text) !== plainText(item.meta.title);
-};
+let debounceTimer: ReturnType<typeof setTimeout>;
 
 // --- UI Logic ---
 const togglePanel = () => {
@@ -75,9 +54,9 @@ const handleResultClick = (event: Event, url: string): void => {
 	navigateToPage(url);
 };
 
-// --- Core Search Logic ---
+// --- Core Search Logic（按标题子串匹配，中文任意长度都能搜到）---
 const search = async (keyword: string, isDesktop: boolean): Promise<void> => {
-	if (!keyword) {
+	if (!keyword.trim()) {
 		setPanelVisibility(false, isDesktop);
 		result = [];
 		return;
@@ -89,18 +68,12 @@ const search = async (keyword: string, isDesktop: boolean): Promise<void> => {
 	clearTimeout(debounceTimer);
 	debounceTimer = setTimeout(async () => {
 		try {
-			let searchResults: SearchResult[] = [];
-
-			if (import.meta.env.PROD && window.pagefind) {
-				const response = await window.pagefind.search(keyword);
-				searchResults = await Promise.all(
-					response.results.map((item) => item.data()),
-				);
-			} else if (import.meta.env.DEV) {
-				searchResults = fakeResult;
-			}
-
-			result = searchResults;
+			const hits = await searchTitles(keyword, 500);
+			result = hits.map((hit) => ({
+				url: hit.url,
+				meta: { title: hit.titleHtml },
+				excerpt: "",
+			}));
 			setPanelVisibility(true, isDesktop);
 		} catch (error) {
 			console.error("Search error:", error);
@@ -109,34 +82,18 @@ const search = async (keyword: string, isDesktop: boolean): Promise<void> => {
 		} finally {
 			isSearching = false;
 		}
-	}, 300); // 300ms debounce
+	}, 200); // 200ms debounce
 };
 
 // --- Initialization onMount ---
 onMount(() => {
-	const initializePagefind = () => {
-		initialized = true;
-		if (keywordDesktop) search(keywordDesktop, true);
-		if (keywordMobile) search(keywordMobile, false);
-	};
-
-	if (import.meta.env.DEV) {
-		console.log("Pagefind mock enabled in development mode.");
-		initializePagefind();
-	} else {
-		if (window.pagefind) {
-			// If script already loaded
-			initializePagefind();
-		} else {
-			// Listen for the event
-			document.addEventListener("pagefindready", initializePagefind, {
-				once: true,
-			});
-			document.addEventListener("pagefindloaderror", initializePagefind, {
-				once: true,
-			});
-		}
-	}
+	initialized = true;
+	// 预加载标题索引，首次输入就能立刻出结果
+	loadTitleIndex().catch((error) => {
+		console.error("Failed to load title index:", error);
+	});
+	if (keywordDesktop) search(keywordDesktop, true);
+	if (keywordMobile) search(keywordMobile, false);
 });
 
 // --- Reactive Statements ---
@@ -201,24 +158,6 @@ top-20 left-4 md:left-[unset] right-4 shadow-2xl rounded-2xl p-2">
                     <Icon icon="fa7-solid:chevron-right"
                           class="transition text-[0.75rem] translate-x-1 my-auto text-(--primary)"></Icon>
                 </div>
-                {#if hasDistinctExcerpt(item, item.excerpt)}
-                    <div class="transition text-sm text-50" style="display: flex; align-items: flex-start; margin-top: 0.1rem">
-                        <div>
-                            {@html item.excerpt}
-                        </div>
-                    </div>
-                {/if}
-
-                {#if hasDistinctExcerpt(item, item.content)}
-                    <div class="transition text-sm text-30" style="display: flex; align-items: flex-start; margin-top: 0.1rem">
-                        <span style="display: inline-block; background-color: var(--btn-plain-bg-active); color: var(--primary); padding: 0.1em 0.4em; border-radius: 5px; font-size: 0.75em; font-weight: 600; margin-right: 0.5em; shrink: 0;">
-                            {i18n(I18nKey.searchContent)}
-                        </span>
-                        <div>
-                            {@html item.content}
-                        </div>
-                    </div>
-                {/if}
             </a>
         {/each}
         {#if result.length > 5}
@@ -231,13 +170,9 @@ top-20 left-4 md:left-[unset] right-4 shadow-2xl rounded-2xl p-2">
                 </span>
             </a>
         {/if}
-    {:else if result.length === 0}
-        <div class="transition first-of-type:mt-2 lg:first-of-type:mt-0 block rounded-xl text-lg px-3 py-2 text-50">
-            {i18n(I18nKey.searchNoResults)}
-        </div>
     {:else if keywordDesktop || keywordMobile}
         <div class="transition first-of-type:mt-2 lg:first-of-type:mt-0 block rounded-xl text-lg px-3 py-2 text-50">
-            {i18n(I18nKey.searchTypeSomething)}
+            {i18n(I18nKey.searchNoResults)}
         </div>
     {/if}
 </div>
@@ -252,4 +187,3 @@ top-20 left-4 md:left-[unset] right-4 shadow-2xl rounded-2xl p-2">
         overflow-y: auto;
     }
 </style>
-

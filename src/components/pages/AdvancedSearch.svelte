@@ -3,8 +3,11 @@ import I18nKey from "@i18n/i18nKey";
 import { i18n } from "@i18n/translation";
 import { onMount } from "svelte";
 import Icon from "@/components/common/Icon.svelte";
-import type { SearchResult } from "@/global";
-import { url as formatUrl } from "@/utils/url-utils";
+import {
+	loadTitleIndex,
+	searchTitles,
+	type TitleSearchHit,
+} from "@/utils/title-search";
 
 // --- Props ---
 export let title = i18n(I18nKey.search);
@@ -12,9 +15,10 @@ export let description = "";
 
 // --- State ---
 let keyword = "";
-let results: SearchResult[] = [];
+let hits: TitleSearchHit[] = [];
 let isSearching = false;
-let initialized = false;
+// 是否已经执行过一次搜索（用于区分“还没搜”和“搜了没结果”）
+let searched = false;
 
 // 在客户端获取 URL 参数
 const getInitialKeyword = (): string => {
@@ -25,102 +29,58 @@ const getInitialKeyword = (): string => {
 	return "";
 };
 
-// --- Mocks for Dev Mode ---
-const fakeResult: SearchResult[] = [
-	{
-		url: formatUrl("/"),
-		meta: { title: "Dev Mode Search Result 1" },
-		excerpt: "This is a <mark>mock</mark> result for development.",
-	},
-	{
-		url: formatUrl("/"),
-		meta: { title: "Dev Mode Search Result 2" },
-		excerpt: "Pagefind only works in <mark>production</mark> build.",
-	},
-];
-
-// 索引只包含文章标题，摘录若与标题内容相同就不再重复显示
-const plainText = (value?: string): string =>
-	(value ?? "")
-		.replace(/<[^>]*>/g, "")
-		.replace(/\s+/g, " ")
-		.trim();
-
-const shouldShowExcerpt = (item: SearchResult): boolean => {
-	const excerpt = item.excerpt ?? "";
-	if (!excerpt.includes("<mark>")) return false;
-	return plainText(excerpt) !== plainText(item.meta.title);
+const formatDate = (timestamp: number): string => {
+	const date = new Date(timestamp);
+	if (Number.isNaN(date.getTime())) return "";
+	const month = String(date.getMonth() + 1).padStart(2, "0");
+	const day = String(date.getDate()).padStart(2, "0");
+	return `${date.getFullYear()}-${month}-${day}`;
 };
 
-// --- Core Search Logic ---
+// --- Core Search Logic（按标题子串匹配）---
 const search = async () => {
-	if (!initialized || !keyword.trim()) {
-		results = [];
+	if (!keyword.trim()) {
+		hits = [];
+		searched = false;
 		return;
 	}
-	isSearching = true;
 
+	isSearching = true;
 	try {
-		if (import.meta.env.PROD && window.pagefind) {
-			const response = await window.pagefind.search(keyword);
-			const rawResults = await Promise.all(
-				response.results.map((item) => item.data()),
-			);
-			results = rawResults;
-		} else if (import.meta.env.DEV) {
-			// 开发模式下的模拟结果
-			results = fakeResult.filter(
-				(item) =>
-					item.excerpt.toLowerCase().includes(keyword.toLowerCase()) ||
-					item.meta.title.toLowerCase().includes(keyword.toLowerCase()),
-			);
-		}
+		hits = await searchTitles(keyword, 1000);
+		searched = true;
 	} catch (error) {
 		console.error("Search error:", error);
-		results = [];
+		hits = [];
+		searched = true;
 	} finally {
 		isSearching = false;
 	}
 };
 
-// --- Initialization onMount ---
+// --- Initialize onMount ---
 onMount(() => {
-	const initialize = async () => {
-		initialized = true;
+	const initialKeyword = getInitialKeyword();
+	if (initialKeyword) {
+		keyword = initialKeyword;
+	}
 
-		// 从 URL 获取初始关键词
-		const initialKeyword = getInitialKeyword();
-		if (initialKeyword) {
-			keyword = initialKeyword;
-		}
+	// 预加载标题索引
+	loadTitleIndex().catch((error) => {
+		console.error("Failed to load title index:", error);
+	});
 
-		// 如果有关键词，自动执行搜索
-		if (keyword.trim()) {
-			await search();
-		}
-	};
-
-	// 开发环境直接初始化
-	if (import.meta.env.DEV) {
-		initialize();
-	} else {
-		// 生产环境等待 Pagefind 加载
-		if (window.pagefind) {
-			initialize();
-		} else {
-			document.addEventListener("pagefindready", initialize, {
-				once: true,
-			});
-		}
+	if (keyword.trim()) {
+		void search();
 	}
 });
 
-let debounceTimer: NodeJS.Timeout;
+let debounceTimer: ReturnType<typeof setTimeout>;
 const handleInput = () => {
 	clearTimeout(debounceTimer);
 	debounceTimer = setTimeout(() => {
 		search();
-	}, 300);
+	}, 200);
 };
 </script>
 
@@ -166,24 +126,29 @@ const handleInput = () => {
             <div class="flex justify-center py-10">
                 <Icon icon="svg-spinners:ring-resize" class="text-4xl text-(--primary)" />
             </div>
-        {:else if results.length > 0}
+        {:else if hits.length > 0}
             <div class="space-y-4">
-                {#each results as result}
+                {#each hits as hit}
                     <div class="card-base p-6 block rounded-(--radius-large)">
-                        <a href={result.url} class="block group">
+                        <a href={hit.url} class="block group">
                             <h5 class="mb-2 text-2xl font-bold tracking-tight text-90 group-hover:text-(--primary) transition-colors">
-                                {@html result.meta.title}
+                                {@html hit.titleHtml}
                             </h5>
-                            {#if shouldShowExcerpt(result)}
-                                <p class="font-normal text-75">
-                                    {@html result.excerpt}
-                                </p>
-                            {/if}
+                            <div class="flex flex-wrap items-center gap-x-3 gap-y-1 text-sm text-50">
+                                {#if hit.category}
+                                    <span class="inline-block rounded-md px-2 py-0.5 bg-(--btn-plain-bg-hover) text-(--primary)">
+                                        {hit.category}
+                                    </span>
+                                {/if}
+                                {#if hit.published}
+                                    <span>{formatDate(hit.published)}</span>
+                                {/if}
+                            </div>
                         </a>
                     </div>
                 {/each}
             </div>
-        {:else if keyword}
+        {:else if searched}
             <div class="card-base p-10 text-center text-50 rounded-(--radius-large)">
                 {i18n(I18nKey.searchNoResults)}
             </div>

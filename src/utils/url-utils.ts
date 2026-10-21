@@ -46,13 +46,15 @@ export function getTagUrl(tag: string): string {
 }
 
 export function getCategoryUrl(category: string | null): string {
+	const uncategorized = i18n(I18nKey.uncategorized);
+	// 分类改为独立的静态页面（/categories/<分类名>/），显示带封面的文章卡片
 	if (
 		!category ||
 		category.trim() === "" ||
-		category.trim().toLowerCase() === i18n(I18nKey.uncategorized).toLowerCase()
+		category.trim().toLowerCase() === uncategorized.toLowerCase()
 	)
-		return url("/archive/?uncategorized=true");
-	return url(`/archive/?category=${encodeURIComponent(category.trim())}`);
+		return url(`/categories/${encodeURIComponent(uncategorized)}/`);
+	return url(`/categories/${encodeURIComponent(category.trim())}/`);
 }
 
 export function getDir(path: string): string {

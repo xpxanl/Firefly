@@ -1,0 +1,97 @@
+---
+import type { GetStaticPaths } from "astro";
+import type { CollectionEntry } from "astro:content";
+import { Icon } from "astro-icon/components";
+import Pagination from "@/components/common/Pagination.astro";
+import PostPage from "@/components/layout/PostPage.astro";
+import { siteConfig } from "@/config";
+import I18nKey from "@/i18n/i18nKey";
+import { i18n } from "@/i18n/translation";
+import MainGridLayout from "@/layouts/MainGridLayout.astro";
+import { getSortedPosts } from "@/utils/content-utils";
+import { url } from "@/utils/url-utils";
+
+type PostEntry = CollectionEntry<"posts">;
+
+export const getStaticPaths = (async ({ paginate }) => {
+	const posts = await getSortedPosts();
+	const categoryMap = new Map<string, PostEntry[]>();
+
+	for (const post of posts) {
+		const category =
+			(post.data.category ?? "").trim() || i18n(I18nKey.uncategorized);
+		if (!categoryMap.has(category)) {
+			categoryMap.set(category, []);
+		}
+		categoryMap.get(category)?.push(post);
+	}
+
+	// 与首页一致：每页 siteConfig.pagination.postsPerPage 篇
+	const pageSize = siteConfig.pagination.postsPerPage;
+
+	return Array.from(categoryMap.entries()).flatMap(([category, entries]) =>
+		paginate(entries, { params: { category }, pageSize }),
+	);
+}) satisfies GetStaticPaths;
+
+const { page } = Astro.props;
+const categoryName = Astro.params.category ?? "";
+const pageTitle =
+	page.currentPage > 1
+		? `${categoryName} (${page.currentPage}/${page.lastPage})`
+		: categoryName;
+
+const baseUrl = `/categories/${encodeURIComponent(categoryName)}/`;
+const len = page.data.length;
+---
+
+<MainGridLayout
+  title={pageTitle}
+  description={`${i18n(I18nKey.categories)}：${categoryName} · ${page.total} ${i18n(I18nKey.postsCount)}`}
+>
+  <div class="card-base px-8 py-6 mb-4" data-pagefind-ignore>
+    <div class="flex flex-wrap items-center justify-between gap-3">
+      <div class="min-w-0">
+        <div class="text-2xl font-bold text-(--primary) mb-2">
+          <Icon is:inline
+            name="material-symbols:folder-open"
+            class="inline-block align-[-0.15em] mr-1.5 text-[1.35rem]"
+          />
+          {categoryName}
+        </div>
+        <p class="text-30 text-sm">
+          {i18n(I18nKey.categories)} · {page.total}
+          {i18n(page.total === 1 ? I18nKey.postCount : I18nKey.postsCount)}
+        </p>
+      </div>
+      <a
+        href={url("/categories/")}
+        class="btn-regular rounded-lg h-10 px-4 flex items-center gap-2 text-sm shrink-0"
+      >
+        <Icon is:inline name="material-symbols:arrow-back-rounded" class="text-lg" />
+        {i18n(I18nKey.allCategories)}
+      </a>
+    </div>
+  </div>
+
+  {
+    page.total > 0 ? (
+      <PostPage page={page} />
+    ) : (
+      <div class="card-base px-8 py-12 text-center text-50" data-pagefind-ignore>
+        {i18n(I18nKey.noData)}
+      </div>
+    )
+  }
+
+  {
+    page.total > page.size && (
+      <Pagination
+        class="mx-auto onload-animation"
+        page={page}
+        base={baseUrl}
+        style={`animation-delay: calc(var(--content-delay) + ${len * 50}ms)`}
+      />
+    )
+  }
+</MainGridLayout>
