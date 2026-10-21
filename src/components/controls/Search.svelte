@@ -30,6 +30,18 @@ const fakeResult: SearchResult[] = [
 	},
 ];
 
+// 索引只包含文章标题，摘录/内容与标题重复时不再重复展示
+const plainText = (value?: string): string =>
+	(value ?? "")
+		.replace(/<[^>]*>/g, "")
+		.replace(/\s+/g, " ")
+		.trim();
+
+const hasDistinctExcerpt = (item: SearchResult, text?: string): boolean => {
+	if (!text || !text.includes("<mark>")) return false;
+	return plainText(text) !== plainText(item.meta.title);
+};
+
 // --- UI Logic ---
 const togglePanel = () => {
 	document
@@ -189,7 +201,7 @@ top-20 left-4 md:left-[unset] right-4 shadow-2xl rounded-2xl p-2">
                     <Icon icon="fa7-solid:chevron-right"
                           class="transition text-[0.75rem] translate-x-1 my-auto text-(--primary)"></Icon>
                 </div>
-                {#if item.excerpt.includes('<mark>')}
+                {#if hasDistinctExcerpt(item, item.excerpt)}
                     <div class="transition text-sm text-50" style="display: flex; align-items: flex-start; margin-top: 0.1rem">
                         <div>
                             {@html item.excerpt}
@@ -197,7 +209,7 @@ top-20 left-4 md:left-[unset] right-4 shadow-2xl rounded-2xl p-2">
                     </div>
                 {/if}
 
-                {#if item.content && item.content.includes('<mark>')}
+                {#if hasDistinctExcerpt(item, item.content)}
                     <div class="transition text-sm text-30" style="display: flex; align-items: flex-start; margin-top: 0.1rem">
                         <span style="display: inline-block; background-color: var(--btn-plain-bg-active); color: var(--primary); padding: 0.1em 0.4em; border-radius: 5px; font-size: 0.75em; font-weight: 600; margin-right: 0.5em; shrink: 0;">
                             {i18n(I18nKey.searchContent)}

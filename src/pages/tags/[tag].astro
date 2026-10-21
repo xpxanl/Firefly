@@ -1,0 +1,86 @@
+---
+import type { GetStaticPaths } from "astro";
+import type { CollectionEntry } from "astro:content";
+import { Icon } from "astro-icon/components";
+import PostPage from "@/components/layout/PostPage.astro";
+import { i18n } from "@/i18n/translation";
+import I18nKey from "@/i18n/i18nKey";
+import MainGridLayout from "@/layouts/MainGridLayout.astro";
+import { getSortedPosts } from "@/utils/content-utils";
+import { url } from "@/utils/url-utils";
+
+type PostEntry = CollectionEntry<"posts">;
+
+export const getStaticPaths = (async () => {
+	const posts = await getSortedPosts();
+	const tagMap = new Map<string, PostEntry[]>();
+
+	for (const post of posts) {
+		// 同一个标签在一个文章里重复出现时只计一次
+		const postTags = Array.from(
+			new Set(
+				(post.data.tags ?? [])
+					.map((tag) => tag.trim())
+					.filter((tag) => tag !== ""),
+			),
+		);
+		for (const tag of postTags) {
+			if (!tagMap.has(tag)) {
+				tagMap.set(tag, []);
+			}
+			tagMap.get(tag)?.push(post);
+		}
+	}
+
+	return Array.from(tagMap.entries()).map(([tag, entries]) => ({
+		params: { tag },
+		props: { tag, entries },
+	}));
+}) satisfies GetStaticPaths;
+
+const { tag, entries } = Astro.props as { tag: string; entries: PostEntry[] };
+
+const postCount = entries.length;
+const pageTitle = `#${tag}`;
+
+// 复用首页的文章列表组件（网格 / 列表卡片，带封面图）
+const page = {
+	data: entries,
+};
+---
+
+<MainGridLayout
+  title={pageTitle}
+  description={`${i18n(I18nKey.tags)}：${tag} · ${postCount} ${i18n(I18nKey.postsCount)}`}
+>
+  <div class="card-base px-8 py-6 mb-4" data-pagefind-ignore>
+    <div class="flex flex-wrap items-center justify-between gap-3">
+      <div class="min-w-0">
+        <div class="text-2xl font-bold text-(--primary) mb-2">
+          <span class="opacity-50">#</span>{tag}
+        </div>
+        <p class="text-30 text-sm">
+          {i18n(I18nKey.tags)} · {postCount}
+          {i18n(postCount === 1 ? I18nKey.postCount : I18nKey.postsCount)}
+        </p>
+      </div>
+      <a
+        href={url("/tags/")}
+        class="btn-regular rounded-lg h-10 px-4 flex items-center gap-2 text-sm shrink-0"
+      >
+        <Icon is:inline name="material-symbols:arrow-back-rounded" class="text-lg" />
+        {i18n(I18nKey.allTags)}
+      </a>
+    </div>
+  </div>
+
+  {
+    postCount > 0 ? (
+      <PostPage page={page} />
+    ) : (
+      <div class="card-base px-8 py-12 text-center text-50" data-pagefind-ignore>
+        {i18n(I18nKey.noData)}
+      </div>
+    )
+  }
+</MainGridLayout>

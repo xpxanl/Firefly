@@ -39,6 +39,19 @@ const fakeResult: SearchResult[] = [
 	},
 ];
 
+// 索引只包含文章标题，摘录若与标题内容相同就不再重复显示
+const plainText = (value?: string): string =>
+	(value ?? "")
+		.replace(/<[^>]*>/g, "")
+		.replace(/\s+/g, " ")
+		.trim();
+
+const shouldShowExcerpt = (item: SearchResult): boolean => {
+	const excerpt = item.excerpt ?? "";
+	if (!excerpt.includes("<mark>")) return false;
+	return plainText(excerpt) !== plainText(item.meta.title);
+};
+
 // --- Core Search Logic ---
 const search = async () => {
 	if (!initialized || !keyword.trim()) {
@@ -161,9 +174,11 @@ const handleInput = () => {
                             <h5 class="mb-2 text-2xl font-bold tracking-tight text-90 group-hover:text-(--primary) transition-colors">
                                 {@html result.meta.title}
                             </h5>
-                            <p class="font-normal text-75">
-                                {@html result.excerpt}
-                            </p>
+                            {#if shouldShowExcerpt(result)}
+                                <p class="font-normal text-75">
+                                    {@html result.excerpt}
+                                </p>
+                            {/if}
                         </a>
                     </div>
                 {/each}
