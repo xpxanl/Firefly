@@ -1,0 +1,34 @@
+Firefly 站点修改说明 / 备份说明
+备份时间：2026-10-21 11:42
+备份内容：修改前的 src/ 全量、pagefind.yml、package.json、astro.config.mjs
+
+本次修改的文件（改前版本已在本目录内，可直接覆盖回去还原）：
+
+1) src/components/common/Markdown.astro
+   改动：<div data-pagefind-body ...>  ->  <div data-pagefind-ignore ...>
+   作用：文章正文不再进入 Pagefind 索引，只索引文章页标题（标题元素本身带
+         data-pagefind-body），因此搜索变成“按标题检索”，搜正文里的词不再命中。
+
+2) src/components/layout/PostPage.astro
+   改动：文章列表容器 #post-list-container 增加 data-pagefind-ignore
+   作用：列表卡片（首页/标签页）里的标题文字不会被当作页面内容索引。
+
+3) src/utils/url-utils.ts（getTagUrl）
+   改动：/archive/?tag=xxx  ->  /tags/xxx/
+   作用：点击标签后进入独立的标签页（带封面图的文章卡片），不再跳到归档的纯文字列表。
+
+4) 新增 src/pages/tags/[tag].astro
+   作用：为每个标签生成静态页面 /tags/<标签名>/，复用首页的 PostPage 组件，
+         用网格/列表卡片展示文章（含封面图），顶部显示标签名、文章数与返回「全部标签」。
+
+5) src/components/pages/AdvancedSearch.svelte、src/components/controls/Search.svelte
+   作用：索引只剩标题后，避免把与标题相同的摘录再重复显示一遍（只在摘录与标题不同
+         且含高亮时显示）。
+
+还原方式（任选其一）：
+  cp -a /sdcard/NP/mcp/Firefly_backup_20261021_1142/src/. /sdcard/NP/mcp/Firefly/src/
+  然后删除 /sdcard/NP/mcp/Firefly/src/pages/tags/[tag].astro
+
+生效步骤：需要重新构建并重建搜索索引
+  cd /sdcard/NP/mcp/Firefly
+  npm run build   （或 pnpm build；其内部已包含 pagefind --site dist）
