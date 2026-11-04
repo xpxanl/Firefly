@@ -4,8 +4,9 @@ import { i18n } from "@i18n/translation";
 import { navigateToPage } from "@utils/navigation-utils";
 import { onMount } from "svelte";
 import Icon from "@/components/common/Icon.svelte";
-import { loadTitleIndex, searchTitles } from "@/utils/title-search";
+import { loadTitleIndex, searchTitles } from "@/utils/site-search";
 import { getSearchUrl } from "@/utils/url-utils";
+import { searchConfig } from "@/config/searchConfig";
 
 interface SearchResultItem {
 	url: string;
@@ -68,7 +69,11 @@ const search = async (keyword: string, isDesktop: boolean): Promise<void> => {
 	clearTimeout(debounceTimer);
 	debounceTimer = setTimeout(async () => {
 		try {
-			const hits = await searchTitles(keyword, 500);
+			const hits = await searchTitles(
+				keyword,
+				500,
+				searchConfig.quickSearchSimilarity / 100,
+			);
 			result = hits.map((hit) => ({
 				url: hit.url,
 				meta: { title: hit.titleHtml },
@@ -148,7 +153,7 @@ top-20 left-4 md:left-[unset] right-4 shadow-2xl rounded-2xl p-2">
             {i18n(I18nKey.searchLoading)}
         </div>
     {:else if result.length > 0}
-        {#each result.slice(0, 5) as item}
+        {#each result.slice(0, searchConfig.quickSearchLimit) as item}
             <a href={item.url}
                on:click={(e) => handleResultClick(e, item.url)}
                class="transition first-of-type:mt-2 lg:first-of-type:mt-0 group block
@@ -160,12 +165,20 @@ top-20 left-4 md:left-[unset] right-4 shadow-2xl rounded-2xl p-2">
                 </div>
             </a>
         {/each}
-        {#if result.length > 5}
+        <a href={getSearchUrl(keywordDesktop || keywordMobile)}
+           on:click={(e) => handleResultClick(e, getSearchUrl(keywordDesktop || keywordMobile))}
+           class="transition first-of-type:mt-2 lg:first-of-type:mt-0 group block rounded-xl text-sm px-3 py-2 text-50 hover:text-(--primary) hover:bg-(--btn-plain-bg-hover) active:bg-(--btn-plain-bg-active)">
+            <span class="inline-flex items-center">
+                {i18n(I18nKey.searchSearchInContent).replace('{query}', (keywordDesktop || keywordMobile).trim())}
+                <Icon icon="fa7-solid:arrow-right" class="transition text-[0.65rem] ml-1"></Icon>
+            </span>
+        </a>
+        {#if result.length > searchConfig.quickSearchLimit}
             <a href={getSearchUrl(keywordDesktop || keywordMobile)}
                on:click={(e) => handleResultClick(e, getSearchUrl(keywordDesktop || keywordMobile))}
                class="transition first-of-type:mt-2 lg:first-of-type:mt-0 group block rounded-xl text-lg px-3 py-2 hover:bg-(--btn-plain-bg-hover) active:bg-(--btn-plain-bg-active) text-(--primary) font-bold text-center">
                 <span class="inline-flex items-center">
-                    {i18n(I18nKey.searchViewMore).replace('{count}', (result.length - 5).toString())}
+                    {i18n(I18nKey.searchViewMore).replace('{count}', (result.length - searchConfig.quickSearchLimit).toString())}
                     <Icon icon="fa7-solid:arrow-right" class="transition text-[0.75rem] ml-1"></Icon>
                 </span>
             </a>
@@ -174,6 +187,14 @@ top-20 left-4 md:left-[unset] right-4 shadow-2xl rounded-2xl p-2">
         <div class="transition first-of-type:mt-2 lg:first-of-type:mt-0 block rounded-xl text-lg px-3 py-2 text-50">
             {i18n(I18nKey.searchNoResults)}
         </div>
+        <a href={getSearchUrl(keywordDesktop || keywordMobile)}
+           on:click={(e) => handleResultClick(e, getSearchUrl(keywordDesktop || keywordMobile))}
+           class="transition first-of-type:mt-2 lg:first-of-type:mt-0 group block rounded-xl text-sm px-3 py-2 text-(--primary) font-bold hover:bg-(--btn-plain-bg-hover) active:bg-(--btn-plain-bg-active)">
+            <span class="inline-flex items-center">
+                {i18n(I18nKey.searchSearchInContent).replace('{query}', (keywordDesktop || keywordMobile).trim())}
+                <Icon icon="fa7-solid:arrow-right" class="transition text-[0.65rem] ml-1"></Icon>
+            </span>
+        </a>
     {/if}
 </div>
 

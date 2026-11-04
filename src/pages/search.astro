@@ -14,4 +14,9 @@ const description = "";
     </div>
 </MainGridLayout>
 
-<!-- 搜索使用站点自带的标题索引（src/utils/title-search.ts + /api/postTitles.json），无需 Pagefind -->
+<!--
+  搜索说明（和标题搜索同一套代码，见 src/utils/site-search.ts）：
+  - 标题索引：/api/postTitles.json（体积很小，导航栏也用）
+  - 正文索引：/api/postSearchIndex.json（构建时生成，含正文纯文本，搜索页拉一次）
+  前端拿到索引后本地做「子串 + 相似度 80%~100% 容错」匹配，无需 Pagefind。
+-->

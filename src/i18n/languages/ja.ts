@@ -12,6 +12,12 @@ export const ja: Translation = {
 	[Key.searchSummary]: "摘要",
 	[Key.searchContent]: "内容",
 	[Key.searchViewMore]: "さらに結果を表示 ({count} 件)",
+	[Key.searchSimilarity]: "類似度",
+	[Key.searchSimilarityTip]: "80% は数文字の誤字を許容し、100% は完全一致を要求します。",
+	[Key.searchResultCount]: "{count} 件の結果",
+	[Key.searchHitInTitle]: "タイトル",
+	[Key.searchHitInContent]: "本文",
+	[Key.searchSearchInContent]: "本文から「{query}」を検索",
 	[Key.other]: "その他",
 	[Key.all]: "すべて",
 

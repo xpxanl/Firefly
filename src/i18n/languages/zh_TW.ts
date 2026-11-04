@@ -12,6 +12,12 @@ export const zh_TW: Translation = {
 	[Key.searchSummary]: "摘要",
 	[Key.searchContent]: "內容",
 	[Key.searchViewMore]: "查看更多結果 ({count} 個更多)",
+	[Key.searchSimilarity]: "相似度",
+	[Key.searchSimilarityTip]: "80% 可容忍少量錯別字，100% 需完全一致。",
+	[Key.searchResultCount]: "{count} 條結果",
+	[Key.searchHitInTitle]: "標題命中",
+	[Key.searchHitInContent]: "正文命中",
+	[Key.searchSearchInContent]: "在正文中搜尋「{query}」",
 	[Key.other]: "其他",
 	[Key.all]: "全部",
 

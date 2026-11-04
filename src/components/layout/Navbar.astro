@@ -367,4 +367,4 @@ if (document.readyState === 'loading') {
 }
 </script>
 
-<!-- 搜索已改为站点自带的标题索引（src/utils/title-search.ts），不再需要 Pagefind 运行时 -->
+<!-- 搜索使用站点自带的索引（src/utils/site-search.ts）：标题 /api/postTitles.json + 正文 /api/postSearchIndex.json，不再需要 Pagefind 运行时 -->

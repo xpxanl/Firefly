@@ -12,6 +12,12 @@ export const en: Translation = {
 	[Key.searchSummary]: "Summary",
 	[Key.searchContent]: "Content",
 	[Key.searchViewMore]: "View more results ({count} more)",
+	[Key.searchSimilarity]: "Similarity",
+	[Key.searchSimilarityTip]: "80% tolerates a few typos, 100% requires an exact match.",
+	[Key.searchResultCount]: "{count} results",
+	[Key.searchHitInTitle]: "title",
+	[Key.searchHitInContent]: "text",
+	[Key.searchSearchInContent]: "Search “{query}” in article text",
 	[Key.other]: "Other",
 	[Key.all]: "All",
 

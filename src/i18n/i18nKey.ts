@@ -9,6 +9,12 @@ enum I18nKey {
 	searchSummary = "searchSummary",
 	searchContent = "searchContent",
 	searchViewMore = "searchViewMore",
+	searchSimilarity = "searchSimilarity",
+	searchSimilarityTip = "searchSimilarityTip",
+	searchResultCount = "searchResultCount",
+	searchHitInTitle = "searchHitInTitle",
+	searchHitInContent = "searchHitInContent",
+	searchSearchInContent = "searchSearchInContent",
 	other = "other",
 
 	tags = "tags",

@@ -1,0 +1,96 @@
+正文内容搜索（和标题搜索同一套方案） 改造说明
+================================================
+改造时间：2026-11-04
+改前备份：/storage/emulated/0/NP/mcp/Firefly_backup_20261104_1301
+（含整份 src/、pagefind.yml、package.json，可直接覆盖回去还原）
+
+一、最终方案（一句话）
+----------------------
+和标题搜索完全同一套路子：**构建时生成一个静态 JSON 索引 → 前端拉一次 → 本地匹配**。
+区别只是这个索引里多带了「正文纯文本」，所以搜「ORCSOFT」这种词，
+正文里出现过的文章就会列出来（不是只匹配标题）。
+
+  /api/postTitles.json      标题索引，体积很小，导航栏随页面预加载（原有）
+  /api/postSearchIndex.json 正文索引，构建时生成，搜索页第一次搜索时拉一次
+
+两个索引共用同一份匹配代码（src/utils/site-search.ts）：
+先精确子串（indexOf），失配再按相似度容错。
+
+没有分片、没有并发请求、没有进度条，也不需要 Pagefind。
+
+二、实测（全部 1276 篇真实文章）
+--------------------------------
+· 索引单文件 2.20 MB，gzip 后约 972 KB，只下载一次，之后走内存缓存
+· 搜「ORCSOFT」→ 命中正文含「社团名：#ORCSOFT」的文章《你妈真漂亮/你妈真是个好女人》，相似度 100%
+· 搜「orcsoft」（小写）→ 同样命中（大小写 / 全半角不敏感）
+· 搜「orcsof」（少字母但仍是子串）→ 命中，100%
+· 搜「ORCSFT」（少一个字母的错别字，非子串）→ 80% 阈值下命中，相似度 86%；拉到 100% 就不命中
+· 多关键词用空格 / 标点分隔，AND 关系，词序不限（例：「ORCSOFT 社团」）
+· 首次搜索（含下载 + 解析 + 扫描 93 万字）约 140 ms（本机 localhost）；
+  索引在内存后，后续每次按键 1~30 ms
+
+三、改了哪些文件
+----------------
+新增：
+  src/pages/api/postSearchIndex.json.ts   正文索引接口（构建时静态生成，带 text 字段）
+  src/utils/site-search.ts                标题搜索 + 正文搜索（同一套代码）
+  src/utils/search-text.ts                文本归一化 / Markdown 清洗 / 编辑距离 / 高亮 / 摘要
+  src/utils/search-index-build.ts         构建期：文章 -> 纯文本索引文档
+  src/config/searchConfig.ts              相似度范围、结果条数、单篇收录上限
+
+修改：
+  src/components/pages/AdvancedSearch.svelte 搜索页：相似度滑杆 + 正文摘要高亮 + 命中位置标记
+  src/components/controls/Search.svelte      导航栏下拉：支持容错 + 「在正文中搜索」入口
+  src/i18n/i18nKey.ts + languages/*.ts       新增文案键（中/繁/英/日/俄）
+  src/config/index.ts                        导出 searchConfig
+  src/pages/search.astro                     仅更新注释说明
+
+（之前那套「分片索引 searchIndex.json + [shard].json.ts + fulltext-search.ts」
+ 已经全部删掉了。）
+
+四、可调参数（src/config/searchConfig.ts）
+------------------------------------------
+  minSimilarity / maxSimilarity / defaultSimilarity  滑杆范围与默认值（80 ~ 100，默认 80）
+  quickSearchSimilarity   导航栏快速搜索的相似度（默认 80）
+  quickSearchLimit        导航栏最多显示几条（默认 5）
+  pageResultLimit         搜索页最多显示几条（默认 300）
+  maxCharsPerPost         单篇文章最多收录多少字（默认 20000，防超长文章把索引撑大）
+
+五、部署（GitHub Pages / Cloudflare 静态托管都行）
+--------------------------------------------------
+你的 wrangler.jsonc 里只有 `assets: { directory: "./dist" }`、没有 main，
+属于纯静态资源部署；构建产物里会多出一个
+  dist/api/postSearchIndex.json
+它就是一个普通静态文件（2 MB 左右，远低于 Cloudflare 25 MiB 单文件上限），
+CDN 会正常 gzip/brotli 压缩，请求数也只多 1 个。
+
+所以：
+  · GitHub Pages（.github/workflows/deploy.yml 用的 pnpm build → dist）→ 直接可用
+  · Cloudflare 静态资源（wrangler deploy / Pages 连接仓库，命令 pnpm build）→ 直接可用
+  · 不要设 CF_WORKERS 环境变量：设了会切到 @astrojs/cloudflare 适配器，
+    输出结构变成 dist/client + dist/server，和你现在的 wrangler.jsonc 不匹配。
+  · 如果用了「缓存一切」的自定义 CDN 规则，建议给 /api/*.json 保留较短缓存，
+    否则发新文章后索引可能最多滞后一个缓存周期。
+
+构建：cd /sdcard/NP/mcp/Firefly && pnpm install && pnpm build
+
+六、已验证
+----------
+· 全量 1276 篇：索引生成 + 引擎本地匹配，11 项断言全过（含上面的 ORCSOFT 用例）
+· 真实 astro build（文章子集 + 本机跳过 cloudflare 适配器/sharp 的校验环境）：
+  产出 dist/api/postSearchIndex.json（40 篇、字段 url/title/category/published/text），
+  无分片残留，搜索页 HTML 正常渲染出「相似度 ≥80%」滑杆；
+  直接用构建产物跑引擎：精确命中、错别字 88% 命中、100% 拒绝 全部符合预期
+· astro check / svelte-check：无新增错误（仅剩主题原有的 2 处 config 错误）
+
+七、注意
+--------
+1. 带 password（密码保护）的文章只索引标题，正文不入索引，避免泄密；
+2. draft 文章沿用原逻辑（生产构建不收录）；
+3. 改了正文 / 新增文章后要重新 pnpm build 才会更新索引；
+4. 想彻底回退：
+     cp -a /storage/emulated/0/NP/mcp/Firefly_backup_20261104_1301/src/. /sdcard/NP/mcp/Firefly/src/
+   再删掉这几个新增文件：
+     src/pages/api/postSearchIndex.json.ts
+     src/config/searchConfig.ts
+     src/utils/site-search.ts, search-text.ts, search-index-build.ts

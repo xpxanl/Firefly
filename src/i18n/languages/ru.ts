@@ -12,6 +12,12 @@ export const ru: Translation = {
 	[Key.searchSummary]: "Резюме",
 	[Key.searchContent]: "Содержание",
 	[Key.searchViewMore]: "Показать еще ({count} шт)",
+	[Key.searchSimilarity]: "Сходство",
+	[Key.searchSimilarityTip]: "80% допускает несколько опечаток, 100% — точное совпадение.",
+	[Key.searchResultCount]: "Результатов: {count}",
+	[Key.searchHitInTitle]: "заголовок",
+	[Key.searchHitInContent]: "текст",
+	[Key.searchSearchInContent]: "Искать «{query}» в тексте статьи",
 	[Key.other]: "Прочее",
 	[Key.all]: "Все",
 
