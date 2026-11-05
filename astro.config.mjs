@@ -102,14 +102,58 @@ export default defineConfig({
 			},
 		}),
 		icon({
+			// 只预加载实际用到的图标。原来 7 套集合全部写 ["*"]（全量加载 3 万+ 个图标）
+			// 是构建期文件句柄/内存的主要消耗源。未列出的图标仍会按需加载。
 			include: {
-				"material-symbols": ["*"],
-				"fa7-brands": ["*"],
-				"fa7-regular": ["*"],
-				"fa7-solid": ["*"],
-				"simple-icons": ["*"],
-				mdi: ["*"],
-				mingcute: ["*"],
+				"material-symbols": [
+					"airwave-rounded", "archive", "arrow-back", "arrow-back-rounded",
+					"arrow-outward-rounded", "article", "article-outline",
+					"book-2-outline-rounded", "bookmark-rounded",
+					"brightness-auto-outline-rounded", "build-outline",
+					"calendar-clock-outline", "calendar-month-outline-rounded",
+					"calendar-today", "calendar-today-outline-rounded", "chat", "check",
+					"chevron-left-rounded", "chevron-right-rounded", "close",
+					"cloud-outline", "computer-outline", "copyright-outline",
+					"dark-mode-outline-rounded", "docs", "download",
+					"edit-calendar-outline-rounded", "emoji-people-rounded",
+					"error-outline", "favorite", "folder-off", "folder-open",
+					"folder-open-rounded", "folder-outline", "format-list-bulleted",
+					"full-coverage-outline-rounded", "gradient", "group",
+					"group-off-outline", "help-outline", "hide-image-outline",
+					"history-rounded", "home", "home-outline-rounded",
+					"home-pin-outline", "image-outline", "info", "info-outline",
+					"ink-pen-outline-rounded", "keyboard-arrow-down-rounded",
+					"keyboard-arrow-up-rounded", "label-outline", "language", "link",
+					"location-on", "lock-outline", "menu-rounded", "more-horiz",
+					"movie", "music-note-rounded", "notes-rounded", "palette-outline",
+					"pause-rounded", "person", "photo-library", "pinboard",
+					"play-arrow-rounded", "recommend", "repeat-one-rounded",
+					"repeat-rounded", "rocket-launch-outline", "rss-feed",
+					"schedule-outline-rounded", "search", "search-off",
+					"search-off-rounded", "sentiment-sad", "settings", "share",
+					"shield-lock", "shuffle-rounded", "signpost", "skip-next-rounded",
+					"skip-previous-rounded", "subtitles-off-outline-rounded",
+					"subtitles-outline-rounded", "sync-rounded", "tag-off",
+					"tag-rounded", "text-ad-outline-rounded", "titlecase-rounded",
+					"update-rounded", "view-carousel-outline",
+					"visibility-outline-rounded", "volume-off-rounded",
+					"volume-up-rounded", "wallpaper", "wb-sunny-outline-rounded",
+				],
+				"fa7-solid": [
+					"arrow-right", "arrow-rotate-left", "arrow-up-right-from-square",
+					"chevron-left", "chevron-right", "envelope", "rocket", "rss", "xmark",
+				],
+				"fa7-brands": [
+					"alipay", "creative-commons", "gitee", "github", "node-js", "qq",
+				],
+				"fa7-regular": ["address-card"],
+				mdi: [
+					"arrow-up", "bed", "clover", "flower-poppy", "github", "home",
+					"playlist-music", "swap-horizontal",
+				],
+				mingcute: ["comment-line", "heartbeat-line"],
+				"simple-icons": ["pnpm"],
+				"svg-spinners": ["ring-resize"],
 			},
 		}),
 		expressiveCode({
@@ -284,6 +328,9 @@ export default defineConfig({
 				pure: ["console.log", "console.debug"],
 			},
 			rollupOptions: {
+				// 限制 Rollup 并发打开的文件句柄数，避免构建环境 EMFILE (too many open files)
+				// 默认值随 Rollup 版本变化，CI/容器环境的 ulimit -n 通常较小
+				maxParallelFileOps: 8,
 				onwarn(warning, warn) {
 					// temporarily suppress this warning
 					if (
