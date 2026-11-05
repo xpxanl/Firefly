@@ -17,7 +17,7 @@ image: ./images/firefly2.avif
 <img src="https://tu.awacg.us/file/1789438266606_图片.png" alt="图片.png" width=100% />
 <img src="https://tu.awacg.us/file/1789438305944_图片.png" alt="图片.png" width=100% />
 
-第三步 得到一个jpg文件
+第三步 得到一个jpg文件（若为MP4也与jpg处理方式一样）
 <img src="https://tu.awacg.us/file/1789438389071_图片.png" alt="图片.png" width=100% />
 注意 点击文件管理器查看选项 文件拓展名是否勾选，否则后续改后缀无效
 <img src="https://tu.awacg.us/file/1789438424688_图片.png" alt="图片.png" width=100% />
