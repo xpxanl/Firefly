@@ -9,7 +9,14 @@ draft: false
 image: ./images/firefly2.avif
 ---
 全站解压码：mmdl
+# exe解压
+第一步 双击自解压exe,输入解压码
+<img src="https://image.acg.lol/file/2026/11/07/image02129691539734d6.png" alt="图片.png" width=100% />
 
+第二部 点击Extract后等待解压完成
+<img src="https://image.acg.lol/file/2026/11/07/image.png" alt="图片.png" width=100% />
+
+# 分卷解压
 第一步 将分卷包下载到同一个文件夹下
 <img src="https://tu.awacg.us/file/1789438208635_图片.png" alt="图片.png" width=100% />
 
